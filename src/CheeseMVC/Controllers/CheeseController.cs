@@ -114,7 +114,12 @@ namespace CheeseMVC.Controllers
                 CheeseCategory newCheeseCategory = context.Categories.Single(c => c.ID == editCheeseViewModel.CategoryID);
 
                 Cheese theCheese = context.Cheeses.Single(c => c.ID == editCheeseViewModel.ID);
-                    
+
+                theCheese.Name = editCheeseViewModel.Name;
+                theCheese.Description = editCheeseViewModel.Description;
+                theCheese.Category = newCheeseCategory;
+
+                /*
                 theCheese = new Cheese
                 {
                     ID = editCheeseViewModel.ID,
@@ -122,6 +127,7 @@ namespace CheeseMVC.Controllers
                     Description = editCheeseViewModel.Description,
                     Category = newCheeseCategory
                 };
+                */
 
                 context.Cheeses.Update(theCheese);
                 context.SaveChanges();
