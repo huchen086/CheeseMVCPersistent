@@ -10,7 +10,7 @@ namespace CheeseMVC.Controllers
 {
     public class CheeseController : Controller
     {
-        private CheeseDbContext context;
+        private readonly CheeseDbContext context;
 
         public CheeseController(CheeseDbContext dbContext)
         {
@@ -96,6 +96,40 @@ namespace CheeseMVC.Controllers
 
             ViewBag.title = "Cheeses in category: " + theCategory.Name;
             return View("Index", theCategory.Cheeses);
+        }
+
+        public IActionResult Edit(int id)
+        {
+            Cheese theCheese = context.Cheeses.Single(c => c.ID == id);
+            EditCheeseViewModel editCheeseViewModel = new EditCheeseViewModel(theCheese, context.Categories.ToList());
+            return View(editCheeseViewModel);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(EditCheeseViewModel editCheeseViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                CheeseCategory newCheeseCategory = context.Categories.Single(c => c.ID == editCheeseViewModel.CategoryID);
+
+                Cheese theCheese = context.Cheeses.Single(c => c.ID == editCheeseViewModel.ID);
+                    
+                theCheese = new Cheese
+                {
+                    ID = editCheeseViewModel.ID,
+                    Name = editCheeseViewModel.Name,
+                    Description = editCheeseViewModel.Description,
+                    Category = newCheeseCategory
+                };
+
+                context.Cheeses.Update(theCheese);
+                context.SaveChanges();
+                return Redirect("/Cheese");
+            }
+            else
+            {
+                return View(editCheeseViewModel);
+            }
         }
     }
 }
