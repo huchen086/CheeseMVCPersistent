@@ -117,6 +117,7 @@ namespace CheeseMVC.Controllers
 
                 theCheese.Name = editCheeseViewModel.Name;
                 theCheese.Description = editCheeseViewModel.Description;
+                theCheese.CategoryID = editCheeseViewModel.CategoryID;
                 theCheese.Category = newCheeseCategory;
 
                 /*
